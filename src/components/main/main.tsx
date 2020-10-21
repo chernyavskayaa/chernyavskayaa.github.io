@@ -16,7 +16,7 @@ const useMainStyles = makeStyles(() => ({
 		width: '100%',
 		justifyContent: 'center',
 		alignItems: 'center',
-		margin: '15px 0',
+		padding: '15px 0',
 	},
 	inputs: {
 		display: 'flex',
