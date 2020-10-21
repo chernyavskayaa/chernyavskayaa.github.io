@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { TextField, Button, Box, makeStyles } from '@material-ui/core';
-import { english } from 'front-constants';
+import { english, numbers } from 'front-constants';
 import { encode, decode } from 'utils';
 
 const useMainStyles = makeStyles(() => ({
@@ -48,7 +48,7 @@ const Main: React.FC<MainProps> = () => {
 	const [result, setResult] = useState('');
 	const [inputError, setInputError] = useState(false);
 	const [alphabetError, setAlphabetError] = useState(false);
-	const [alphabet, setAlphabet] = useState(english);
+	const [alphabet, setAlphabet] = useState([...english, ...numbers]);
 
 	const handleInputTextChange = ({
 		target: { value },

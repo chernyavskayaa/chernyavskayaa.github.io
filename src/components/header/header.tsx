@@ -15,7 +15,9 @@ const Header: React.FC<HeaderProps> = () => {
 
 	return (
 		<Box className={classes.root}>
-			<Typography variant='h4'>Caesar Cipher Encoder/Decoder</Typography>
+			<Typography variant='h4' color='textPrimary'>
+				Caesar Cipher Encoder/Decoder
+			</Typography>
 		</Box>
 	);
 };

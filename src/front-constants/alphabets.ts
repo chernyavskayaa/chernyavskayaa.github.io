@@ -139,7 +139,6 @@ const english = [
 	'k',
 	'l',
 	'm',
-	'm',
 	'o',
 	'p',
 	'q',
