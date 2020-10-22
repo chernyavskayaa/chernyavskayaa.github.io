@@ -1,7 +1,27 @@
-const encode = (value: string, shift: number, alphabet: string[]) => {
+export type EncryptionIncomingData = {
+	value: string;
+	shift: number;
+	alphabet: string[];
+	setError: (isError: boolean) => void;
+};
+
+const encode = ({
+	value,
+	shift,
+	alphabet,
+	setError,
+}: EncryptionIncomingData) => {
 	let result = '';
+	setError(false);
 
 	for (let i = 0; i < value.length; i++) {
+		if (!alphabet.includes(value[i])) {
+			result += value[i];
+			setError(true);
+
+			continue;
+		}
+
 		const index = alphabet.indexOf(value[i]);
 
 		let currentShift = shift;
@@ -16,10 +36,23 @@ const encode = (value: string, shift: number, alphabet: string[]) => {
 	return result;
 };
 
-const decode = (value: string, shift: number, alphabet: string[]) => {
+const decode = ({
+	value,
+	shift,
+	alphabet,
+	setError,
+}: EncryptionIncomingData) => {
 	let result = '';
+	setError(false);
 
 	for (let i = 0; i < value.length; i++) {
+		if (!alphabet.includes(value[i])) {
+			result += value[i];
+			setError(true);
+
+			continue;
+		}
+
 		const index = alphabet.indexOf(value[i]);
 
 		let currentShift = shift;

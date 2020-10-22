@@ -20,15 +20,14 @@ const useMainStyles = makeStyles(() => ({
 	},
 	inputs: {
 		display: 'flex',
-		flexWrap: 'wrap',
 		justifyContent: 'center',
 	},
 	valueInput: {
-		width: '200px',
+		flex: '2',
 		margin: '10px',
 	},
 	shiftInput: {
-		width: '100px',
+		flex: '1',
 		margin: '10px',
 	},
 	marginRight: {
@@ -47,9 +46,11 @@ const Main: React.FC<MainProps> = () => {
 	const [inputValue, setInputValue] = useState('');
 	const [shift, setShift] = useState(1);
 	const [result, setResult] = useState('');
+	const [alphabet, setAlphabet] = useState([...english, ...numbers]);
+
 	const [inputError, setInputError] = useState(false);
 	const [alphabetError, setAlphabetError] = useState(false);
-	const [alphabet, setAlphabet] = useState([...english, ...numbers]);
+	const [notInAlphabetError, setNotInAlphabetError] = useState(false);
 
 	const handleInputTextChange = ({
 		target: { value },
@@ -74,7 +75,14 @@ const Main: React.FC<MainProps> = () => {
 
 		setInputError(false);
 
-		setResult(encode(inputValue, shift, alphabet));
+		setResult(
+			encode({
+				value: inputValue,
+				shift,
+				alphabet,
+				setError: setNotInAlphabetError,
+			})
+		);
 	};
 
 	const handleDecode = () => {
@@ -86,7 +94,14 @@ const Main: React.FC<MainProps> = () => {
 
 		setInputError(false);
 
-		setResult(decode(inputValue, shift, alphabet));
+		setResult(
+			decode({
+				value: inputValue,
+				shift,
+				alphabet,
+				setError: setNotInAlphabetError,
+			})
+		);
 	};
 
 	const handleAlphabet = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -106,6 +121,7 @@ const Main: React.FC<MainProps> = () => {
 					variant='outlined'
 					type='number'
 					error={inputError}
+					fullWidth
 					helperText={
 						inputError
 							? 'You need to provide some text.'
@@ -120,6 +136,7 @@ const Main: React.FC<MainProps> = () => {
 					onChange={handleShiftChange}
 					variant='outlined'
 					type='number'
+					fullWidth
 				/>
 			</Box>
 			<TextField
@@ -165,6 +182,12 @@ const Main: React.FC<MainProps> = () => {
 				InputProps={{
 					readOnly: true,
 				}}
+				error={notInAlphabetError}
+				helperText={
+					notInAlphabetError
+						? 'You provided invalid values'
+						: undefined
+				}
 			/>
 		</Box>
 	);

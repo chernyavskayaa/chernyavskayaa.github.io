@@ -19,7 +19,7 @@ const useAppStyles = makeStyles((theme) => ({
 		justifyContent: 'center',
 		padding: '40px 25px',
 		borderRadius: '10px',
-		backgroundColor: 'rgba(226, 239, 245, 0.384)',
+		backgroundColor: 'rgba(236, 239, 240, 0.5)',
 		backdropFilter: 'blur(5px)',
 	},
 }));
