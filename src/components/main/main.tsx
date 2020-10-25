@@ -1,7 +1,19 @@
 import React, { useState } from 'react';
-import { TextField, Button, Box, makeStyles } from '@material-ui/core';
+import {
+	TextField,
+	Button,
+	Box,
+	makeStyles,
+	Radio,
+	Typography,
+} from '@material-ui/core';
 import { english, numbers } from 'front-constants';
-import { encode, decode } from 'utils';
+import {
+	encode,
+	decode,
+	encodeNaturalLanguage,
+	decodeNaturalLanguage,
+} from 'utils';
 
 const useMainStyles = makeStyles(() => ({
 	root: {
@@ -34,7 +46,7 @@ const useMainStyles = makeStyles(() => ({
 		marginRight: '20px',
 	},
 	margin: {
-		margin: '0 10px',
+		margin: '10px',
 	},
 }));
 
@@ -51,6 +63,7 @@ const Main: React.FC<MainProps> = () => {
 	const [inputError, setInputError] = useState(false);
 	const [alphabetError, setAlphabetError] = useState(false);
 	const [notInAlphabetError, setNotInAlphabetError] = useState(false);
+	const [isCustomAlphabet, setIsCustomAlphabet] = useState(true);
 
 	const handleInputTextChange = ({
 		target: { value },
@@ -66,6 +79,10 @@ const Main: React.FC<MainProps> = () => {
 		}
 	};
 
+	const handleChangeAlphabet = () => {
+		setIsCustomAlphabet((checked) => !checked);
+	};
+
 	const handleEncode = () => {
 		if (!inputValue.length || !alphabet.length) {
 			!inputValue.length && setInputError(true);
@@ -75,14 +92,24 @@ const Main: React.FC<MainProps> = () => {
 
 		setInputError(false);
 
-		setResult(
-			encode({
-				value: inputValue,
-				shift,
-				alphabet,
-				setError: setNotInAlphabetError,
-			})
-		);
+		if (isCustomAlphabet) {
+			setResult(
+				encode({
+					value: inputValue,
+					shift,
+					alphabet,
+					setError: setNotInAlphabetError,
+				})
+			);
+		} else {
+			setResult(
+				encodeNaturalLanguage({
+					value: inputValue,
+					shift,
+					setError: setNotInAlphabetError,
+				})
+			);
+		}
 	};
 
 	const handleDecode = () => {
@@ -94,14 +121,24 @@ const Main: React.FC<MainProps> = () => {
 
 		setInputError(false);
 
-		setResult(
-			decode({
-				value: inputValue,
-				shift,
-				alphabet,
-				setError: setNotInAlphabetError,
-			})
-		);
+		if (isCustomAlphabet) {
+			setResult(
+				decode({
+					value: inputValue,
+					shift,
+					alphabet,
+					setError: setNotInAlphabetError,
+				})
+			);
+		} else {
+			setResult(
+				decodeNaturalLanguage({
+					value: inputValue,
+					shift,
+					setError: setNotInAlphabetError,
+				})
+			);
+		}
 	};
 
 	const handleAlphabet = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -139,19 +176,50 @@ const Main: React.FC<MainProps> = () => {
 					fullWidth
 				/>
 			</Box>
-			<TextField
-				className={classes.margin}
-				label='Current alphabet:'
-				multiline
-				fullWidth
-				value={alphabet.join('')}
-				onChange={handleAlphabet}
-				variant='outlined'
-				error={alphabetError}
-				helperText={
-					alphabetError ? 'You need to provide alphabet' : undefined
-				}
-			/>
+			<Box width='100%'>
+				<Box
+					display='flex'
+					alignItems='center'
+					width='100%'
+					margin='10px'
+				>
+					<Radio
+						onChange={handleChangeAlphabet}
+						checked={isCustomAlphabet}
+					/>
+					<TextField
+						className={classes.margin}
+						label='Custom alphabet:'
+						multiline
+						fullWidth
+						disabled={!isCustomAlphabet}
+						value={alphabet.join('')}
+						onChange={handleAlphabet}
+						variant='outlined'
+						error={alphabetError}
+						helperText={
+							alphabetError
+								? 'You need to provide alphabet'
+								: undefined
+						}
+					/>
+				</Box>
+				<Box
+					display='flex'
+					alignItems='center'
+					width='100%'
+					margin='10px'
+				>
+					<Radio
+						onChange={handleChangeAlphabet}
+						checked={!isCustomAlphabet}
+					/>
+					<Typography>
+						Natural language processing (supports English,
+						<br /> Russian and numbers)
+					</Typography>
+				</Box>
+			</Box>
 			<Box className={classes.buttonBox}>
 				<Button
 					className={classes.marginRight}

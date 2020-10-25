@@ -17,7 +17,7 @@ const useAppStyles = makeStyles((theme) => ({
 		flexDirection: 'column',
 		alignItems: 'center',
 		justifyContent: 'center',
-		padding: '40px 25px',
+		padding: '40px 25px 120px 25px',
 		borderRadius: '10px',
 		backgroundColor: 'rgba(236, 239, 240, 0.5)',
 		backdropFilter: 'blur(5px)',
